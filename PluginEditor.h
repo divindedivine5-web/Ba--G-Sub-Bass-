@@ -14,7 +14,6 @@ public:
 private:
     void timerCallback() override;
     BaiGSubBassAudioProcessor& audioProcessor;
-    
     BaiGLookAndFeel baiGLookAndFeel;
 
     juce::Image heroImage;
@@ -22,12 +21,17 @@ private:
     juce::Label title, subtitle;
     float meter = 0.0f, phase = 0.0f;
 
-    // --- NOUVEAUX COMPOSANTS (Onglets et Clavier) ---
     juce::TabbedComponent tabs { juce::TabbedButtonBar::TabsAtLeft };
     juce::Component mainTab, fxTab, modTab, presetsTab; 
     juce::MidiKeyboardState keyboardState;
     juce::MidiKeyboardComponent keyboard { keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
-    // ------------------------------------------------
+
+    // --- NOS PANNEAUX (GROUPES) ---
+    juce::GroupComponent oscGroup { "osc", "OSCILLATOR" };
+    juce::GroupComponent filterGroup { "filter", "FILTER" };
+    juce::GroupComponent envGroup { "env", "ENVELOPE (AMP)" };
+    juce::GroupComponent fxGroup { "fx", "FX SECTION" };
+    juce::GroupComponent modGroup { "mod", "LFO / MOD" };
 
     struct Control {
         std::unique_ptr<juce::Slider> slider;
