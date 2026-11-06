@@ -10,9 +10,18 @@ const juce::Colour goldLite (0xffffdf91);
 const juce::Colour purple   (0xff9c4a8c);
 }
 
+// --- AJOUT DU DESTRUCTEUR POUR LE LOOKANDFEEL ---
+BaiGSubBassAudioProcessorEditor::~BaiGSubBassAudioProcessorEditor()
+{
+    setLookAndFeel(nullptr); 
+}
+
 BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudioProcessor& p)
     : AudioProcessorEditor(&p), audioProcessor(p)
 {
+    // --- APPLICATION DU NOUVEAU DESIGN ---
+    setLookAndFeel(&baiGLookAndFeel);
+
     heroImage = juce::ImageCache::getFromMemory(BinaryData::bass_hero_jpg, BinaryData::bass_hero_jpgSize);
     setSize(1200, 800);
 
@@ -44,7 +53,7 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
     const std::array<std::pair<const char*, const char*>, 13> defs {{
         {"SUB LEVEL", "sub"}, {"HARMONICS", "harm"}, {"SATURATION", "sat"}, {"PUNCH", "punch"},
         {"RELEASE ms", "release"}, {"GLIDE ms", "glide"}, {"DRIVE", "drive"}, {"CUTOFF Hz", "cutoff"},
-        {"OUTPUT", "output"}, {"TONE", "tone"}, {"SUB OCTAVE", "octave"}, {"LFO RATE", "lfoRate"}, {"LFO DEPTH", "lfoDepth"}
+        {"OUTPUT", "output"}, {"COMP", "comp"}, {"TONE", "tone"}, {"SUB OCTAVE", "octave"}, {"LFO RATE", "lfoRate"}, {"LFO DEPTH", "lfoDepth"}
     }};
 
     for (auto d : defs)
