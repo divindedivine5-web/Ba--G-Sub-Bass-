@@ -108,7 +108,7 @@ void BaiGSubBassAudioProcessor::prepareToPlay(double sr, int block)
     synth.setCurrentPlaybackSampleRate(sr);
     juce::dsp::ProcessSpec spec{sr,(juce::uint32)block,(juce::uint32)getTotalNumOutputChannels()};
     limiter.prepare(spec); limiter.setThreshold(-1.0f); limiter.setRelease(80.0f);
-    for (auto& f:filters) f.setLowPassFrequency(sr,180.0f);
+    for (auto& f:filters) f.setCoefficients(juce::IIRCoefficients::makeLowPass(sr, 180.0));
 }
 void BaiGSubBassAudioProcessor::processBlock(juce::AudioBuffer<float>& b, juce::MidiBuffer& midi)
 {
@@ -122,7 +122,7 @@ void BaiGSubBassAudioProcessor::processBlock(juce::AudioBuffer<float>& b, juce::
     synth.renderNextBlock(b,midi,0,b.getNumSamples());
     for(int ch=0;ch<juce::jmin(2,b.getNumChannels());++ch)
     {
-        filters[ch].setLowPassFrequency(getSampleRate(),val("cutoff"));
+        filters[ch].setCoefficients(juce::IIRCoefficients::makeLowPass(getSampleRate(), val("cutoff")));
         filters[ch].processSamples(b.getWritePointer(ch),b.getNumSamples());
     }
     b.applyGain(val("output"));
