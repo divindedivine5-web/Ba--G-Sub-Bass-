@@ -13,7 +13,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(JUCE)
 
-juce_add_binary_data(BaiGAssets SOURCES Assets/bass_hero.jpg)
+juce_add_binary_data(BaiGAssets SOURCES bass_hero.jpg)
 
 set(BAIG_PLUGIN_FORMATS VST3 Standalone)
 if(APPLE)
