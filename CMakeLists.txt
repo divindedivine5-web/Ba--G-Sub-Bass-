@@ -34,7 +34,6 @@ juce_add_plugin(BaiGSubBass
     EDITOR_WANTS_KEYBOARD_FOCUS TRUE
     COPY_PLUGIN_AFTER_BUILD FALSE
 )
-
 target_sources(BaiGSubBass PRIVATE
     PluginProcessor.cpp
     PluginEditor.cpp
@@ -52,3 +51,4 @@ target_compile_definitions(BaiGSubBass PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
 )
+juce_generate_juce_header(BaiGSubBass)
