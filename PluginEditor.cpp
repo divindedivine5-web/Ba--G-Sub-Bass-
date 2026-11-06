@@ -37,7 +37,7 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
     addAndMakeVisible(keyboard);
     keyboard.setAvailableRange(24, 96);
     keyboard.setKeyWidth(22.0f);
-    // Ligne fautive supprimée : keyboardState.addListener(&audioProcessor);
+    // LIGNE FAUTIVE SUPPRIMÉE ICI
 
     presetBox.addSectionHeading("AFROBEAT");
     const char* names[] = { "Afro Deep Massive", "Afro Groove Bass", "Afro Punch", "Afro Smooth", "Afro Rise", "Afro Nebula" };
@@ -54,16 +54,14 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
     mainTab.addAndMakeVisible(fxGroup);
     mainTab.addAndMakeVisible(modGroup);
 
-    // --- CRÉATION DES BOUTONS ET AFFECTATION AUX PANNEAUX ---
+    // --- CRÉATION DES BOUTONS ---
     struct ControlDef { const char* label; const char* paramId; juce::GroupComponent* group; };
-    // Taille du tableau corrigée de 13 à 14
     std::array<ControlDef, 14> defs = {{
         {"SUB LEVEL", "sub", &oscGroup}, {"HARMONICS", "harm", &oscGroup}, {"SUB OCTAVE", "octave", &oscGroup},
         {"CUTOFF Hz", "cutoff", &filterGroup}, {"TONE", "tone", &filterGroup},
         {"PUNCH", "punch", &envGroup}, {"RELEASE ms", "release", &envGroup},
-        {"SATURATION", "sat", &fxGroup}, {"DRIVE", "drive", &fxGroup}, {"COMP", "comp", &fxGroup},
-        {"LFO RATE", "lfoRate", &modGroup}, {"LFO DEPTH", "lfoDepth", &modGroup}, {"GLIDE ms", "glide", &modGroup},
-        {"OUTPUT", "output", &fxGroup} // Ajout de OUTPUT pour avoir 14 éléments
+        {"SATURATION", "sat", &fxGroup}, {"DRIVE", "drive", &fxGroup}, {"COMP", "comp", &fxGroup}, {"OUTPUT", "output", &fxGroup},
+        {"LFO RATE", "lfoRate", &modGroup}, {"LFO DEPTH", "lfoDepth", &modGroup}, {"GLIDE ms", "glide", &modGroup}
     }};
 
     for (auto d : defs)
@@ -127,22 +125,19 @@ void BaiGSubBassAudioProcessorEditor::resized()
     subtitle.setBounds(170, 47, 570, 22);
     presetBox.setBounds(690, 20, 470, 38);
 
-    // --- DISPOSITION DES PANNEAUX DANS L'ONGLET MAIN ---
     auto mainBounds = mainTab.getLocalBounds().reduced(10);
     
-    // Ligne 1 (Top)
     auto row1 = mainBounds.removeFromTop(180);
     oscGroup.setBounds(row1.removeFromLeft(row1.getWidth() / 3).reduced(5));
     filterGroup.setBounds(row1.removeFromLeft(row1.getWidth() / 2).reduced(5));
     envGroup.setBounds(row1.reduced(5));
 
-    // Ligne 2 (Milieu)
     mainBounds.removeFromTop(10);
     auto row2 = mainBounds.removeFromTop(180);
     modGroup.setBounds(row2.removeFromLeft(row2.getWidth() / 2).reduced(5));
     fxGroup.setBounds(row2.reduced(5));
 
-    // --- DISPOSITION DES BOUTONS À L'INTÉRIEUR DES PANNEAUX ---
+    // --- DISPOSITION DES BOUTONS DANS LES PANNEAUX ---
     auto layoutGroup = [this](juce::GroupComponent& group, int startIndex, int numControls) {
         auto bounds = group.getLocalBounds().reduced(10);
         bounds.removeFromTop(25); 
@@ -154,9 +149,9 @@ void BaiGSubBassAudioProcessorEditor::resized()
         }
     };
 
-    layoutGroup(oscGroup, 0, 3);    
-    layoutGroup(filterGroup, 3, 2); 
-    layoutGroup(envGroup, 5, 2);    
-    layoutGroup(fxGroup, 7, 4);     // J'ai passé de 3 à 4 pour inclure le bouton "Output"
-    layoutGroup(modGroup, 11, 3);   
+    layoutGroup(oscGroup, 0, 3);    // 3 boutons
+    layoutGroup(filterGroup, 3, 2); // 2 boutons
+    layoutGroup(envGroup, 5, 2);    // 2 boutons
+    layoutGroup(fxGroup, 7, 4);     // 4 boutons (Saturation, Drive, Comp, Output)
+    layoutGroup(modGroup, 11, 3);   // 3 boutons (LFO Rate, LFO Depth, Glide)
 }
