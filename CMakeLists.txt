@@ -36,10 +36,10 @@ juce_add_plugin(BaiGSubBass
 )
 
 target_sources(BaiGSubBass PRIVATE
-    Source/PluginProcessor.cpp
-    Source/PluginEditor.cpp
+    PluginProcessor.cpp
+    PluginEditor.cpp
 )
-target_include_directories(BaiGSubBass PRIVATE Source)
+target_include_directories(BaiGSubBass PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(BaiGSubBass PRIVATE
     BaiGAssets
     juce::juce_audio_utils
