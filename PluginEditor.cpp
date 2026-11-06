@@ -37,6 +37,7 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
     addAndMakeVisible(keyboard);
     keyboard.setAvailableRange(24, 96);
     keyboard.setKeyWidth(22.0f);
+    // Ligne fautive supprimée : keyboardState.addListener(&audioProcessor);
 
     presetBox.addSectionHeading("AFROBEAT");
     const char* names[] = { "Afro Deep Massive", "Afro Groove Bass", "Afro Punch", "Afro Smooth", "Afro Rise", "Afro Nebula" };
@@ -55,13 +56,15 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
 
     // --- CRÉATION DES BOUTONS ET AFFECTATION AUX PANNEAUX ---
     struct ControlDef { const char* label; const char* paramId; juce::GroupComponent* group; };
-    std::vector<ControlDef> defs = {
+    // Taille du tableau corrigée de 13 à 14
+    std::array<ControlDef, 14> defs = {{
         {"SUB LEVEL", "sub", &oscGroup}, {"HARMONICS", "harm", &oscGroup}, {"SUB OCTAVE", "octave", &oscGroup},
         {"CUTOFF Hz", "cutoff", &filterGroup}, {"TONE", "tone", &filterGroup},
         {"PUNCH", "punch", &envGroup}, {"RELEASE ms", "release", &envGroup},
         {"SATURATION", "sat", &fxGroup}, {"DRIVE", "drive", &fxGroup}, {"COMP", "comp", &fxGroup},
-        {"LFO RATE", "lfoRate", &modGroup}, {"LFO DEPTH", "lfoDepth", &modGroup}, {"GLIDE ms", "glide", &modGroup}
-    };
+        {"LFO RATE", "lfoRate", &modGroup}, {"LFO DEPTH", "lfoDepth", &modGroup}, {"GLIDE ms", "glide", &modGroup},
+        {"OUTPUT", "output", &fxGroup} // Ajout de OUTPUT pour avoir 14 éléments
+    }};
 
     for (auto d : defs)
     {
@@ -78,7 +81,6 @@ BaiGSubBassAudioProcessorEditor::BaiGSubBassAudioProcessorEditor(BaiGSubBassAudi
         
         c.attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.parameters, d.paramId, *c.slider);
         
-        // On ajoute le slider et le label DANS le panneau (GroupComponent) correspondant
         d.group->addAndMakeVisible(*c.slider);
         d.group->addAndMakeVisible(*c.label);
         controls.push_back(std::move(c));
@@ -141,10 +143,9 @@ void BaiGSubBassAudioProcessorEditor::resized()
     fxGroup.setBounds(row2.reduced(5));
 
     // --- DISPOSITION DES BOUTONS À L'INTÉRIEUR DES PANNEAUX ---
-    // Petite fonction locale pour placer les boutons côte à côte dans leur boîte
     auto layoutGroup = [this](juce::GroupComponent& group, int startIndex, int numControls) {
         auto bounds = group.getLocalBounds().reduced(10);
-        bounds.removeFromTop(25); // Espace pour le titre du panneau
+        bounds.removeFromTop(25); 
         int width = bounds.getWidth() / numControls;
         for (int i = 0; i < numControls; ++i) {
             auto ctrlArea = bounds.removeFromLeft(width);
@@ -153,9 +154,9 @@ void BaiGSubBassAudioProcessorEditor::resized()
         }
     };
 
-    layoutGroup(oscGroup, 0, 3);    // Sub Level, Harmonics, Sub Octave
-    layoutGroup(filterGroup, 3, 2); // Cutoff, Tone
-    layoutGroup(envGroup, 5, 2);    // Punch, Release
-    layoutGroup(fxGroup, 7, 3);     // Saturation, Drive, Comp
-    layoutGroup(modGroup, 10, 3);   // LFO Rate, LFO Depth, Glide
+    layoutGroup(oscGroup, 0, 3);    
+    layoutGroup(filterGroup, 3, 2); 
+    layoutGroup(envGroup, 5, 2);    
+    layoutGroup(fxGroup, 7, 4);     // J'ai passé de 3 à 4 pour inclure le bouton "Output"
+    layoutGroup(modGroup, 11, 3);   
 }
