@@ -1,12 +1,12 @@
 #pragma once
 #include "PluginProcessor.h"
-#include "BaiGLookAndFeel.h" // Ajout du LookAndFeel
+#include "BaiGLookAndFeel.h"
 
 class BaiGSubBassAudioProcessorEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
     explicit BaiGSubBassAudioProcessorEditor(BaiGSubBassAudioProcessor&);
-    ~BaiGSubBassAudioProcessorEditor() override; // Modifié pour le LookAndFeel
+    ~BaiGSubBassAudioProcessorEditor() override;
     
     void paint(juce::Graphics&) override;
     void resized() override;
@@ -15,13 +15,20 @@ private:
     void timerCallback() override;
     BaiGSubBassAudioProcessor& audioProcessor;
     
-    BaiGLookAndFeel baiGLookAndFeel; // Instance du style
+    BaiGLookAndFeel baiGLookAndFeel;
 
     juce::Image heroImage;
     juce::ComboBox presetBox;
     juce::Label title, subtitle;
     float meter = 0.0f, phase = 0.0f;
-    
+
+    // --- NOUVEAUX COMPOSANTS (Onglets et Clavier) ---
+    juce::TabbedComponent tabs { juce::TabbedButtonBar::TabsAtLeft };
+    juce::Component mainTab, fxTab, modTab, presetsTab; 
+    juce::MidiKeyboardState keyboardState;
+    juce::MidiKeyboardComponent keyboard { keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
+    // ------------------------------------------------
+
     struct Control {
         std::unique_ptr<juce::Slider> slider;
         std::unique_ptr<juce::Label> label;
